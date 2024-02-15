@@ -303,6 +303,7 @@ class ConsultaModel extends Model{
             while ($row = $query->fetch()) {
 
                 $item = new Cliente();
+                $item->idCliente        = $row['idCliente'];
                 $item->codigoCliente        = $row['codigoCliente'];
                 $item->nombreCliente    = $row['nombreCliente'];
                 $item->telefonoCliente   = $row['telefonoCliente'];
