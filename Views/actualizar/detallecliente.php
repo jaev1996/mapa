@@ -39,7 +39,7 @@
                 <option value="J -">J -</option>
             </select><br>
             <p><label class="font-weight-bold" for="resultado">Identificacion</label></p>
-            <input class="form-control form-control-sm" type="text" name="codigoCliente" value="<?php echo $cliente->codigoCliente; ?>" id="" required><br>
+            <input class="form-control form-control-sm" type="text" name="codigoCliente" value="<?php echo $cliente["codigoCliente"]; ?>" id="" required><br>
             <p>
             <label class="font-weight-bold" for="orgAud">Nombre del Vendedor</label>
             </p>
