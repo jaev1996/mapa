@@ -35,11 +35,22 @@
             <label class="font-weight-bold" for="orgAud">Tipo Doc.</label>
             </p>
             <select class="form-control form-control-sm col-4" name="tipoDoc" id="">
-                <option value="V -">V -</option>
-                <option value="J -">J -</option>
+                <?php
+                    $tipoDoc = substr($cliente["codigoCliente"], 0, 1);
+                    $identify = substr($cliente["codigoCliente"], 4);
+                    if ($tipoDoc == "V") {
+                        echo '
+                        <option value="V -">V -</option>
+                        <option value="J -">J -</option>';
+                    }else {
+                        echo '
+                        <option value="J -">J -</option>
+                        <option value="V -">V -</option>';
+                    }
+                ?>
             </select><br>
             <p><label class="font-weight-bold" for="resultado">Identificacion</label></p>
-            <input class="form-control form-control-sm" type="text" name="codigoCliente" value="<?php echo $cliente["codigoCliente"]; ?>" id="" required><br>
+            <input class="form-control form-control-sm" type="text" name="codigoCliente" value="<?php echo $identify; ?>" id="" required><br>
             <p>
             <label class="font-weight-bold" for="orgAud">Nombre del Vendedor</label>
             </p>
@@ -51,18 +62,22 @@
                 foreach($v as $row){
                     $vendedor = new Vendedor();
                     $vendedor = $row;
+                    if ($cliente["idVendedor"] != $vendedor->idVendedor) {
+                       
+                    
             ?>
                     <option value="<?php echo $vendedor->idVendedor; ?>"><?php echo $vendedor->nombreVendedor; ?></option>
             <?php
+                    }
                 }
             ?>
             </select><br>
             <p><label class="font-weight-bold" for="resultado">Telefono</label></p>
-            <input class="form-control form-control-sm" type="text" name="telefonoCliente" id="" required><br>
+            <input class="form-control form-control-sm" type="text" name="telefonoCliente" value="<?php echo $cliente["telefonoCliente"]; ?>" id="" required><br>
             <p>
             <label class="font-weight-bold" for="anioGestion">Direccion del Cliente</label><br>
             </p>
-            <textarea class="form-control form-control-sm" name="direccionCliente" id="" cols="" rows=""></textarea>
+            <textarea class="form-control form-control-sm" name="direccionCliente" id="" cols="" rows=""><?php echo $cliente["direccionCliente"]; ?></textarea>
             
         </div>
         </div>
