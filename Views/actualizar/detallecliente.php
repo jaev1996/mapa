@@ -75,9 +75,10 @@
             <p><label class="font-weight-bold" for="resultado">Telefono</label></p>
             <input class="form-control form-control-sm" type="text" name="telefonoCliente" value="<?php echo $cliente["telefonoCliente"]; ?>" id="" required><br>
             <p>
-            <label class="font-weight-bold" for="anioGestion">Direccion del Cliente</label><br>
+                <label class="font-weight-bold" for="anioGestion">Direccion del Cliente</label><br>
             </p>
             <textarea class="form-control form-control-sm" name="direccionCliente" id="" cols="" rows=""><?php echo $cliente["direccionCliente"]; ?></textarea>
+            <input class="form-control form-control-sm" type="text" name="idCliente" value="<?php echo $cliente["idCliente"]; ?>" id="" hidden="true" required><br>
             
         </div>
         </div>

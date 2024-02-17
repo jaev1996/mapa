@@ -139,6 +139,32 @@
                 }
         }
 
+        function ejecutaractcli(){
+            $codigoCliente   = $_POST['codigoCliente'];
+            $idCliente       = $_POST['idCliente'];
+            $tipoDoc         = $_POST['tipoDoc'];
+            $idVendedor      = $_POST['idVendedor'];
+            $nombreCliente   = $_POST['nombreCliente'];
+            $telefonoCliente = $_POST['telefonoCliente'];
+            $direccionCliente = $_POST['direccionCliente'];
+            $codigoCompleto  = $tipoDoc." ".$codigoCliente;
+
+            if($resultado = $this->model->getCodigoCliente($idCliente, $codigoCliente)){
+                if ($this->model->updateCli([   'codigoCliente'    => $codigoCompleto, 
+                                                'idCliente'        => $idCliente, 
+                                                'idVendedor'       => $idVendedor,  
+                                                'nombreCliente'    => $nombreCliente, 
+                                                'direccionCliente' => $direccionCliente, 
+                                                'telefonoCliente'  => $telefonoCliente])) {
+                        echo "<script type='text/javascript'>alert('Actualizado Correctamente');window.location.replace('".constant('URL')."actualizar/detallesCliente/".$idCliente."');</script>";                
+                        }else {
+                            echo "<script type='text/javascript'>alert('No se pudo Realizar la Operacion');window.location.replace('".constant('URL')."actualizar/detallesCliente/".$idCliente."');</script>";                
+                        }             
+                }else {  
+                    echo "<script type='text/javascript'>alert('Esta Cedula esta Aignada a Otro Vendedor Cliente');window.location.replace('".constant('URL')."actualizar/detallesCliente/".$idCliente."');</script>";                    
+                }
+        }
+
         function ejecutaractrep(){      
             $codigoRep  = $_POST['codigoRep'];
             $idRep      = $_POST['idRep'];
