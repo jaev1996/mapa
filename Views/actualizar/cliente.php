@@ -29,7 +29,7 @@
         </div>
     </div>
     
-            <center>
+    <center>
     <div class="row col-md-10 justify-content-center">
         
     <table class="col-md-12 table table-sm table-bordered text-dark table-hover">
