@@ -328,12 +328,15 @@ class ConsultaModel extends Model{
             if($nombre === ""){
                 $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE idVendedor = :id ORDER BY nombreCliente ASC");
                 $query->execute(['id' => $idVendedor]);
+            }elseif ($idVendedor == "0") {
+                $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE nombreCliente LIKE :txt ORDER BY nombreCliente ASC");
+                $query->bindValue(':txt', '%' . $nombre . '%', PDO::PARAM_STR);
+                $query->execute();
             }else {
                 $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE idVendedor = :id AND nombreCliente LIKE :txt ORDER BY nombreCliente ASC");
                 $query->bindValue(':txt', '%' . $nombre . '%', PDO::PARAM_STR);
                 $query->bindValue(':id', $idVendedor, PDO::PARAM_INT);
                 $query->execute();
-
             }
 
             while ($row = $query->fetch()) {
@@ -362,7 +365,7 @@ class ConsultaModel extends Model{
 
         try {
 
-            if($id == null){
+            if($id == 0){
                 $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE nombreCliente LIKE :txt ORDER BY nombreCliente ASC");
                 $query->bindValue(':txt', '%' . $nombre . '%', PDO::PARAM_STR);
                 $query->execute();

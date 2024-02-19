@@ -51,9 +51,9 @@
                 echo  $html;
 
                 
-            }elseif (isset($_POST["searchTxtCli"])) {
-                $search = $_POST["searchTxtCli"];
-                $search2 = $_POST["searchSelectVend"];
+            }elseif (isset($_POST["txtCli"])) {
+                $search = $_POST["txtCli"];
+                $search2 = $_POST["txtVend"];
                 $html = $this->model->getAllFromClienteByNombre($search, $search2);
                 echo  $html;
                 

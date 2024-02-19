@@ -49,14 +49,11 @@
 
             $("#searchTxtCli").keyup(function(){
                 var parametro1 = $(this).val();
-                var parametro2 = $("#searchSelectVend").val(); 
-                if (parametro2 == '0') {
-                    parametro2 = null;
-                }
+                var parametro2 = $("#searchSelectVend").val();
                 console.log(parametro2)
                 var parametros = {
-                    "searchSelectVend": parametro2,
-                    "searchTxtCli": parametro1
+                    "txtVend": parametro2,
+                    "txtCli": parametro1
                 };
                 $.ajax({
                   data:  parametros,
@@ -100,7 +97,7 @@
                             <form class="" method="post">
                                 <label for="">Seleccione el Vendedor</label>
                                 <select class="form-control form-control-sm col-12" name="tipoRep" id="searchSelectVend">
-                                    <option value="null" selected>-- Seleccionar --</option>
+                                    <option value="0" selected>-- Seleccionar --</option>
                                 
                                     <?php 
                                         include_once 'Models/vendedor.php';
