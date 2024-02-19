@@ -37,7 +37,7 @@ class NotasModel extends Model{
     }
     public function getClienteByDescAndCod($txtbusca){
         
-        $html="<select class='form-control form-control-sm' name='idCliente'>";
+        $html="<option value='0'>"."Seleccione un cliente"."</option>";
         $error = "ERROR EN LA CONSULTA";
         try {
             $query = $this->db->connect()->prepare("SELECT  codigoCliente, nombreCliente FROM CLIENTE WHERE nombreCliente LIKE :txtbusca OR codigoCliente LIKE :txtbuscar ORDER BY nombreCliente DESC");
@@ -47,10 +47,31 @@ class NotasModel extends Model{
             while ($row = $query->fetch()) {
                 $html.= "<option value='".$row["codigoCliente"]."'>".$row["nombreCliente"]."</option>";
             }
-            $html.="</select>";
+            //$html.="</select>";
             echo $html;
         } catch (PDOException $e) {
             return $error;
+        }
+    }
+
+    public function getVendedorAuth($id){
+        $html="<select class='form-control form-control-sm' name='idVendedor'>";
+        $error = "ERROR EN LA CONSULTA";
+        try {
+            $query = $this->db->connect()->prepare("SELECT idVendedor FROM CLIENTE WHERE codigoCliente = :codigoCliente");
+            $query->execute(['codigoCliente'   => $id]);
+            $resultado = $query->fetch();
+            
+            $query2 = $this->db->connect()->prepare("SELECT codigoVendedor, nombreVendedor FROM VENDEDOR WHERE idVendedor = :idVendedor");
+            $query2->execute(['idVendedor'   => $resultado[0]]);
+            $vendedor = $query2->fetch();
+            
+            
+            $html.= "<option value='".$vendedor["codigoVendedor"]."'>".$vendedor["nombreVendedor"]."</option>";
+            $html.="</select>";
+            echo $html;
+        }catch(PDOException $e){
+            echo $error; 
         }
     }
 
@@ -441,6 +462,8 @@ class NotasModel extends Model{
             }
             return $item;
     }
+
+
 
     public function getVendedorById($id){
         $query = $this->db->connect()->prepare("SELECT*FROM VENDEDOR WHERE codigoVendedor = :codigoVendedor");

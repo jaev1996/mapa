@@ -30,18 +30,25 @@
             if (isset($_POST["txtbusca"])) {
                 $txtbusca = $_POST["txtbusca"];
                 $html = $this->model->getClienteByDescAndCod($txtbusca);
-                //$u=$user->buscar("repuestos"," descripRep like '%".$_POST['txtbusca']."%' OR codigoRep like '%".$_POST['txtbusca']."%'");
-                //return $html;
-                /*else:
-                echo "Error";
-                endif;*/
-                //$x = $_POST["txtbusca"];
+                //var_dump($html);
                 return $html;
             }else {
                 $this->view->render('consulta/busqueda');
             }
             
         }
+        function buscaVendedor(){
+            $html = "ENTRA EN LA FUNCION";
+            if (isset($_POST["buscavend"])) {
+                $buscavend = $_POST["buscavend"];
+                $html = $this->model->getVendedorAuth($buscavend);
+                return $html;
+            }else {
+                $this->view->render('consulta/busqueda');
+            }
+            
+        }
+
         function printNota(){
             
             $this->view->render('notas/printnota');
