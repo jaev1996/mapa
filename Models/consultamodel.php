@@ -279,7 +279,7 @@ class ConsultaModel extends Model{
     public function getAllFromVendedor(){
         $items = [];
         try {
-            $query = $this->db->connect()->query("SELECT*FROM VENDEDOR");
+            $query = $this->db->connect()->query("SELECT*FROM VENDEDOR ORDER BY nombreVendedor ASC");
             while ($row = $query->fetch()) {
 
                 $item = new Vendedor();
@@ -317,6 +317,85 @@ class ConsultaModel extends Model{
         }
         
     }
+
+    public function getAllFromClienteByVendedor($id, $nombre){
+        $html="";
+
+        $idVendedor = $id;
+        $nombre = $nombre;
+        $query = "";
+        try {
+            if($nombre === ""){
+                $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE idVendedor = :id ORDER BY nombreCliente ASC");
+                $query->execute(['id' => $idVendedor]);
+            }elseif ($idVendedor == "0") {
+                $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE nombreCliente LIKE :txt ORDER BY nombreCliente ASC");
+                $query->bindValue(':txt', '%' . $nombre . '%', PDO::PARAM_STR);
+                $query->execute();
+            }else {
+                $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE idVendedor = :id AND nombreCliente LIKE :txt ORDER BY nombreCliente ASC");
+                $query->bindValue(':txt', '%' . $nombre . '%', PDO::PARAM_STR);
+                $query->bindValue(':id', $idVendedor, PDO::PARAM_INT);
+                $query->execute();
+            }
+
+            while ($row = $query->fetch()) {
+                $html.='<tr>
+                            <td>'.$row["nombreCliente"].'</td>
+                            <td>'.$row["codigoCliente"].'</td>
+                            <td>'.$row["direccionCliente"].'</td>
+                            <td class="text-center"><a class="btn btn-sm btn-info" href="'.constant("URL").'actualizar/detallesCliente/'.$row["idCliente"].'">Ver Detalles</a>
+                            </td>
+                        </tr>';
+            }
+            return $html;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+
+            return [];
+        }
+        
+    }
+
+    public function getAllFromClienteByNombre($txt, $id){
+        $html="";
+
+        $nombre = $txt;
+        $query = "";
+
+        try {
+
+            if($id == 0){
+                $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE nombreCliente LIKE :txt ORDER BY nombreCliente ASC");
+                $query->bindValue(':txt', '%' . $nombre . '%', PDO::PARAM_STR);
+                $query->execute();
+            }else {
+                $query = $this->db->connect()->prepare("SELECT*FROM CLIENTE WHERE idVendedor = :id AND nombreCliente LIKE :txt ORDER BY nombreCliente ASC");
+                $query->bindValue(':txt', '%' . $nombre . '%', PDO::PARAM_STR);
+                $query->bindValue(':id', $id, PDO::PARAM_INT);
+                $query->execute();
+
+            }
+            
+
+            while ($row = $query->fetch()) {
+                $html.='<tr>
+                            <td>'.$row["nombreCliente"].'</td>
+                            <td>'.$row["codigoCliente"].'</td>
+                            <td>'.$row["direccionCliente"].'</td>
+                            <td class="text-center"><a class="btn btn-sm btn-info" href="'.constant("URL").'actualizar/detallesCliente/'.$row["idCliente"].'">Ver Detalles</a>
+                            </td>
+                        </tr>';
+            }
+            return $html;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+
+            return [];
+        }
+        
+    }
+
     public function getTipo(){
         $items = [];
         try {

@@ -52,13 +52,14 @@ class ActualizarModel extends Model{
 
     public function updateCli($datos){
 
-        $queryUpdate = $this->db->connect()->prepare("UPDATE CLIENTE SET codigoCliente = :codigoCliente, nombreCliente = :nombreCliente, telefonoCliente = :telefonoCliente, direccionCliente = :direccionCliente WHERE idCliente = :idCliente");
+        $queryUpdate = $this->db->connect()->prepare("UPDATE CLIENTE SET codigoCliente = :codigoCliente, nombreCliente = :nombreCliente, telefonoCliente = :telefonoCliente, idVendedor = :idVendedor, direccionCliente = :direccionCliente WHERE idCliente = :idCliente");
             try {
                 $queryUpdate->execute([
                     'codigoCliente'    => $datos['codigoCliente'],
                     'nombreCliente'    => $datos['nombreCliente'],
                     'telefonoCliente'  => $datos['telefonoCliente'],
                     'direccionCliente' => $datos['direccionCliente'],
+                    'idVendedor'       => $datos['idVendedor'],
                     'idCliente'        => $datos['idCliente']
                 ]);
                 return true;
@@ -343,6 +344,22 @@ class ActualizarModel extends Model{
             }
             return true;
         } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function getCodigoCliente($id, $codigo){
+        
+        try {
+            $query = $this->db->connect()->prepare("SELECT COUNT(*) FROM CLIENTE WHERE codigoCliente = :codigo AND idCliente != :id");
+            $query->bindParam(':codigo', $codigo);
+            $query->bindParam(':id', $id);
+            $query->execute();
+    
+            $count = $query->fetchColumn();
+            return $count === 0; // Si no hay registros, devuelve true; de lo contrario, devuelve false.
+        } catch (PDOException $e) {
+            
             return false;
         }
     }

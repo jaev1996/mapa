@@ -19,13 +19,29 @@
                   type:  'post',
                     beforeSend: function () { },
                     success:  function (response) {                 
-                        $(".salida").html(response);
+                        $(".idCliente").html(response);
                   },
                   error:function(){
                       alert("error")
                     }
                 });
               }
+              
+            });
+            $("#idCliente").change(function(){
+              var parametros="buscavend="+$(this).val()
+                $.ajax({
+                  data:  parametros,
+                  url:   '../notas/buscaVendedor',
+                  type:  'post',
+                    beforeSend: function () { },
+                    success:  function (response) {                 
+                        $(".salidavend").html(response);
+                  },
+                  error:function(){
+                      alert("error")
+                    }
+                });
               
             });
         });
@@ -51,18 +67,15 @@
                                 <input class="form-control form-control-sm" type="text" name="txtbusca" id="txtbusca" placeholder="Buscar Cliente">
                         </div><br>
                         <div class="salida col-md-4">
+                            <select id='idCliente' class='form-control form-control-sm idCliente' name='idCliente'>
+                            </select>
                         </div>
                 </div>
                 <div class="form-row justify-content-center">
                     
                     <label for="">Vendedor:</label>
-                    <div class="form-group col-md-6">
-                    <select class="form-control form-control-sm" name="idVendedor" id="">
-                        <option value="NULL">Seleccione un Vendedor</option>
-                        <?php foreach($this->vendedor as $row){ ?>
-                        <option value="<?php echo $row->codigoVendedor; ?>"> <?php echo $row->codigoVendedor." ".$row->nombreVendedor; ?></option>
-                        <?php }?>
-                    </select>
+                    <div class="form-group salidavend col-md-6">
+                    
                     </div>
                 </div>
                 <div class="form-row justify-content-center">

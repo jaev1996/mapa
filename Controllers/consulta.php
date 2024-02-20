@@ -39,6 +39,27 @@
             }
             
         }
+        function searchClientes(){
+            $html = "";
+            if (isset($_POST["searchSelectVend"])) {
+                $search = $_POST["searchSelectVend"];
+                $search2 = NULL;
+                if (isset($_POST["searchTxtCli"])) {
+                    $search2 = $_POST["searchTxtCli"];
+                }
+                $html = $this->model->getAllFromClienteByVendedor($search, $search2);
+                echo  $html;
+
+                
+            }elseif (isset($_POST["txtCli"])) {
+                $search = $_POST["txtCli"];
+                $search2 = $_POST["txtVend"];
+                $html = $this->model->getAllFromClienteByNombre($search, $search2);
+                echo  $html;
+                
+            }
+            
+        }
 
 
 
@@ -82,9 +103,10 @@
             $this->view->render('consulta/tipos');
         }
         function verClientes($param = NULL){
-            $clientes = $this->model->getAllFromCliente();
-            $this->view->clientes = $clientes;
-            $this->view->render('actualizar/cliente');
+            //$clientes = $this->model->getAllFromCliente();
+            $vendedores = $this->model->getAllFromVendedor();
+            $this->view->vendedores = $vendedores;
+            $this->view->render('consulta/clientes');
         }
         function verProveedores($param = NULL){
             $this->view->render('consulta/proveedores');
