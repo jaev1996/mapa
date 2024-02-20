@@ -86,7 +86,7 @@
                     <div class="card col-6 float-right">
                         <div class="card-body">
                             <form class="" method="post">
-                                <label for="">Buscar Cliente Por Nombre:</label>
+                                <label for="">Buscar Por Nombre:</label>
                                 <input class="form-control form-control-sm col-8" type="text" name="codigoRep" id="searchTxtCli" value="">
                                 
                             </form>
