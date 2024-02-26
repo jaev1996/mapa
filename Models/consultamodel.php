@@ -344,7 +344,9 @@ class ConsultaModel extends Model{
                             <td>'.$row["nombreCliente"].'</td>
                             <td>'.$row["codigoCliente"].'</td>
                             <td>'.$row["direccionCliente"].'</td>
-                            <td class="text-center"><a class="btn btn-sm btn-info" href="'.constant("URL").'actualizar/detallesCliente/'.$row["idCliente"].'">Ver Detalles</a>
+                            <td class="text-center">
+                            <a class="btn btn-sm btn-info mb-2" href="'.constant("URL").'actualizar/detallesCliente/'.$row["idCliente"].'">Detalles</a>
+                            <a class="btn btn-sm btn-primary" href="'.constant("URL").'consulta/verNotasCliente/'.$row["idCliente"].'">Notas</a>
                             </td>
                         </tr>';
             }
@@ -383,7 +385,9 @@ class ConsultaModel extends Model{
                             <td>'.$row["nombreCliente"].'</td>
                             <td>'.$row["codigoCliente"].'</td>
                             <td>'.$row["direccionCliente"].'</td>
-                            <td class="text-center"><a class="btn btn-sm btn-info" href="'.constant("URL").'actualizar/detallesCliente/'.$row["idCliente"].'">Ver Detalles</a>
+                            <td class="text-center">
+                            <a class="btn btn-sm btn-info mb-2" href="'.constant("URL").'actualizar/detallesCliente/'.$row["idCliente"].'">Detalles</a>
+                            <a class="btn btn-sm btn-primary" href="'.constant("URL").'consulta/verNotasCliente/'.$row["idCliente"].'">Notas</a>
                             </td>
                         </tr>';
             }
@@ -427,6 +431,40 @@ class ConsultaModel extends Model{
             return $resp;
         }
 
+    }
+
+
+    //FUNCIONES PARA MANEJO DE LA VISTA "NOTASCLIENTE"
+
+    public function getNotasByCliente($id){
+        $items = [];
+        $query = $this->db->connect()->prepare("SELECT codigoVenta, tipoPago, estatusVenta, fechaVenta FROM VENTAS WHERE idCliente = :idCliente ORDER BY codigoVenta DESC LIMIT 10");
+        try {
+            $query->execute(['idCliente' => $id]);
+            $resp = '';
+            while ($row = $query->fetch()) {
+                array_push($items, $row);
+            }
+            return $items;
+        } catch (PDOException $e) {
+            return $items;
+        }
+
+    }
+
+    public function getCodigoCliente($id){
+        
+        try {
+            $query = $this->db->connect()->prepare("SELECT nombreCliente, codigoCliente FROM CLIENTE WHERE idCliente = :idCliente LIMIT 1");
+            $query->bindParam(':idCliente', $id);
+            $query->execute();
+    
+            $resp = $query->fetch();
+            return $resp;
+        } catch (PDOException $e) {
+            
+            return false;
+        }
     }
 
     public function getRepuestoForTipo($id){

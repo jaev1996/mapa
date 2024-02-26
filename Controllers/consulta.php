@@ -108,6 +108,15 @@
             $this->view->vendedores = $vendedores;
             $this->view->render('consulta/clientes');
         }
+        function verNotasCliente($param = NULL){
+            $id = $param[0];
+            $cliente = $this->model->getCodigoCliente($id);
+            $notas = $this->model->getNotasByCliente($cliente["codigoCliente"]);
+
+            $this->view->cliente = $cliente;
+            $this->view->notas = $notas;
+            $this->view->render('consulta/notascliente');
+        }
         function verProveedores($param = NULL){
             $this->view->render('consulta/proveedores');
         }
