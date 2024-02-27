@@ -436,6 +436,7 @@ class ConsultaModel extends Model{
 
     //FUNCIONES PARA MANEJO DE LA VISTA "NOTASCLIENTE"
 
+    // FUNCION QUE CONSULTA LAS NOTAS RECIENTES DE UN CLIENTE EN ESPECIFICO
     public function getNotasByCliente($id){
         $items = [];
         $query = $this->db->connect()->prepare("SELECT codigoVenta, tipoPago, estatusVenta, fechaVenta FROM VENTAS WHERE idCliente = :idCliente ORDER BY codigoVenta DESC LIMIT 10");

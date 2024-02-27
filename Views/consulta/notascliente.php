@@ -23,6 +23,7 @@
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script language="JavaScript" type="text/javascript">
         $(document).ready(function(){
             $("#searchSelectVend").change(function(){
@@ -48,6 +49,35 @@
             });
 
         });
+
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+            ['Codigo Repuesto', 'Cantidades'],
+            ['B2068',     15],
+            ['B2069',      10],
+            ['PFS-600',  2],
+            ['XS6E-6600-AD', 4],
+            ['16100-97405', 3],
+            ['16100-B9010', 4],
+            ['96293075', 3],
+            ['M-83HV',    1]
+            ]);
+
+            var options = {
+            title: 'Repuestos Mas Solicitados',
+            pieHole: 0.4,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            var chart2 = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+            chart.draw(data, options);
+            chart2.draw(data, options);
+        }
     </script>
 </head>
 <body class="bg-secondary">
@@ -65,7 +95,7 @@
                         <div class="card-body">
                             <form class="" method="post">
                                 <label for="">Buscar Cliente Por Nombre:</label>
-                                <input class="form-control form-control-sm col-8" type="text" name="codigoRep" id="searchTxtCli" value="">
+                               
                                 
                             </form>
                         </div>            
@@ -81,10 +111,10 @@
                 </div>
                     
             </div>
-            <br>
-            <br>
 
-            <div class="row col-md-10 justify-content-center">
+            <div class="row col-md-6 float-right mt-4">
+                <div class="text-center text-black h4 font-weight-bold mb-4">Notas Recientes:</div>
+
                 
                 <table class="col-md-12 table table-sm table-bordered text-dark table-hover">
                     <thead class="bg-primary text-light">
@@ -97,14 +127,28 @@
                         </tr>
                     </thead>
                     <tbody class="font-weight-bold salida">
+                    <?php 
+                        foreach ($this->notas as $key) {
+                            echo "<tr> <td>".$key["codigoVenta"]."</td> <td>".$key["fechaVenta"]."</td> <td>".$key["tipoPago"]."</td> <td>".$key["estatusVenta"]."</td> <td> <a class='btn btn-sm btn-info mt-2 mb-2' href='#'>Editar</a></td> </tr>";
+                        }
+                    ?>    
                         
                     </tbody>
                 </table>
-                <?php 
-                    foreach ($this->notas as $key) {
-                        echo $key["codigoVenta"]." ".$key["estatusVenta"]." ".$key["tipoPago"]." ".$key["fechaVenta"]."<br>";
-                    }
-                ?>    
+                
+            </div>
+            <div class="row col-md-6 float-left mt-4">
+                
+                <div class="text-center text-black h4 font-weight-bold mb-4">Estadisticas:</div>
+                
+                <div class="row">
+                    <div class="col-md-6" id="piechart" style="width: 1200px; height: 250px;"> holas</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" id="piechart2" style="width: 1200px; height: 250px;"></div>
+                </div>
+                
+                
             </div>
     
         </div>
