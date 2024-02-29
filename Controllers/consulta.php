@@ -112,8 +112,10 @@
             $id = $param[0];
             $cliente = $this->model->getCodigoCliente($id);
             $notas = $this->model->getNotasByCliente($cliente["codigoCliente"]);
+            $rep = $this->model->getRepNotasBetweenId($id);
 
             $this->view->cliente = $cliente;
+            $this->view->rep = $rep;
             $this->view->notas = $notas;
             $this->view->render('consulta/notascliente');
         }

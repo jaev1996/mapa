@@ -452,6 +452,26 @@ class ConsultaModel extends Model{
         }
 
     }
+    public function getRepNotasBetweenId($id){
+        $items = [];
+        $facturas_deseadas = [3885, 3840, 3694];
+        try { 
+            $query = $this->db->connect()->prepare("SELECT codigoRep, SUM(cantidadRep) AS TotalVendido
+            FROM historicoventas
+            WHERE codigoVenta IN (" . implode(',', $facturas_deseadas) . ")
+            GROUP BY codigoRep
+            ORDER BY TotalVendido DESC
+            LIMIT 10");
+            $query->execute();
+            while ($row = $query->fetch()) {
+                array_push($items, $row);
+            }
+            return $items;
+        } catch (PDOException $e) {
+            return $items;
+        }
+
+    }
 
     public function getCodigoCliente($id){
         

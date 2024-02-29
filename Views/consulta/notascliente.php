@@ -153,7 +153,11 @@
     
         </div>
 
-        <div class="card-footer"><br></div>
+        <div class="card-footer"><br>
+            <?php 
+                var_dump($this->rep);
+            ?>
+        </div>
     </div>
     <br><br>
     
