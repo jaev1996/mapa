@@ -112,11 +112,19 @@
             $id = $param[0];
             $cliente = $this->model->getCodigoCliente($id);
             $notas = $this->model->getNotasByCliente($cliente["codigoCliente"]);
-            $rep = $this->model->getRepNotasBetweenId($id);
+            $rep = $this->model->getRepNotasBetweenId($notas['facturas_deseadas']);
+            $stats = $this->model->getStatsGeneralesCliente($cliente['codigoCliente']);
+
+
 
             $this->view->cliente = $cliente;
+            $this->view->cantidadVentas = $stats['cantidadVentas'];
+            $this->view->totalVentas = $stats['subTotal'];
+            $this->view->anios = $stats['anios'];
+            $this->view->meses = $stats['meses'];
+            $this->view->fechaUltimaVenta = $stats['fechaUltimaVenta'];
             $this->view->rep = $rep;
-            $this->view->notas = $notas;
+            $this->view->notas = $notas['items'];
             $this->view->render('consulta/notascliente');
         }
         function verProveedores($param = NULL){

@@ -441,20 +441,65 @@ class ConsultaModel extends Model{
         $items = [];
         $query = $this->db->connect()->prepare("SELECT codigoVenta, tipoPago, estatusVenta, fechaVenta FROM VENTAS WHERE idCliente = :idCliente ORDER BY codigoVenta DESC LIMIT 10");
         try {
+            $facturas_deseadas = [];
             $query->execute(['idCliente' => $id]);
-            $resp = '';
             while ($row = $query->fetch()) {
+                $codigoVenta = $row['codigoVenta'];
+                $facturas_deseadas[] = $codigoVenta;
                 array_push($items, $row);
             }
-            return $items;
+            return ['items' => $items, 'facturas_deseadas' => $facturas_deseadas];
         } catch (PDOException $e) {
-            return $items;
+            return ['items' => $items, 'facturas_deseadas' => $facturas_deseadas];
         }
+    }
+    public function getStatsGeneralesCliente($id){
+        //CONSULTA PRIMERO TODAS LAS FACTURAS DEL CLIENTE
+        $query = $this->db->connect()->prepare("SELECT codigoVenta, fechaVenta FROM VENTAS WHERE idCliente = :idCliente ORDER BY codigoVenta");
+        try {
+            $primeraVenta = null;
+            $ultimaVenta = null;
+            $cantidadVentas=0; 
+            $subTotal=0;
+            $query->execute(['idCliente' => $id]);
+            while ($row = $query->fetch()) {
 
+                $codigoVenta = $row['codigoVenta'];
+                $cantidadVentas += 1;
+                if ($primeraVenta === null) {
+                    $primeraVenta = $row['fechaVenta'];
+                }
+                $ultimaVenta = $row['fechaVenta'];
+                
+                //SEGUNDA CONSULTA PARA EXTRAER EL SUBTOTAL DE CADA VENTA Y HACER UN SOLO TOTAL
+                $query2 = $this->db->connect()->prepare("SELECT SUM(subtotalRep) AS SubTotal FROM HISTORICOVENTAS WHERE codigoVenta = :codigoVenta");
+                $query2->execute(['codigoVenta' => $codigoVenta]);
+
+                while ($row2 = $query2->fetch()) {
+                    $subTotal += $row2['SubTotal']; 
+                }
+
+            }
+            
+            // Convierte las fechas a objetos DateTime
+            $fechaPrimeraVenta = new DateTime($primeraVenta);
+            $fechaUltimaVenta = new DateTime($ultimaVenta);
+
+            // Calcula la diferencia entre las fechas
+            $duracion = $fechaPrimeraVenta->diff($fechaUltimaVenta);
+
+            // Obtiene los años y meses
+            $anios = $duracion->y;
+            $meses = $duracion->m;
+
+            return ['cantidadVentas' => $cantidadVentas, 'subTotal' => $subTotal, 'anios' => $anios, 'meses' => $meses, 'fechaUltimaVenta' => $ultimaVenta];
+        } catch (PDOException $e) {
+            return ['cantidadVentas' => 0, 'subTotal' => 0, 'anios' => 0, 'meses' => 0, 'fechaUltimaVenta' => 0];
+        }
     }
     public function getRepNotasBetweenId($id){
         $items = [];
-        $facturas_deseadas = [3885, 3840, 3694];
+        $facturas_deseadas = $id;
         try { 
             $query = $this->db->connect()->prepare("SELECT codigoRep, SUM(cantidadRep) AS TotalVendido
             FROM historicoventas

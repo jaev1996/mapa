@@ -57,26 +57,23 @@
 
             var data = google.visualization.arrayToDataTable([
             ['Codigo Repuesto', 'Cantidades'],
-            ['B2068',     15],
-            ['B2069',      10],
-            ['PFS-600',  2],
-            ['XS6E-6600-AD', 4],
-            ['16100-97405', 3],
-            ['16100-B9010', 4],
-            ['96293075', 3],
-            ['M-83HV',    1]
+            <?php 
+                foreach ($this->rep as $key) {
+                    echo "['".$key["codigoRep"]."',".$key["TotalVendido"]."],";
+                }
+            ?> 
             ]);
 
             var options = {
             title: 'Repuestos Mas Solicitados',
-            pieHole: 0.4,
+            is3D: true,
+            legendTextStyle: { fontSize: 12 }
             };
 
             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-            var chart2 = new google.visualization.PieChart(document.getElementById('piechart2'));
 
             chart.draw(data, options);
-            chart2.draw(data, options);
+            
         }
     </script>
 </head>
@@ -85,7 +82,7 @@
     <center>
     <div class="card col-md-10">
         <div class="card-header bg-primary mt-2">
-            <h2 class="text-center text-white font-weight-bold">Pedidos de <?php echo $this->cliente["nombreCliente"]; ?></h2>
+            <h3 class="text-center text-white font-weight-bold"><?php echo $this->cliente["nombreCliente"]; ?></h3>
         </div>
         <div class="card-body">
 
@@ -139,24 +136,46 @@
             </div>
             <div class="row col-md-6 float-left mt-4">
                 
-                <div class="text-center text-black h4 font-weight-bold mb-4">Estadisticas:</div>
+                <div class="text-center text-black h4 font-weight-bold mb-4">Estadisticas Generales del Cliente:</div>
                 
-                <div class="row">
-                    <div class="col-md-6" id="piechart" style="width: 1200px; height: 250px;"> holas</div>
+                <div class="">
+                    <ul class="list-group list-group-flush font-weight-bold">
+                        <li class="list-group-item">Tiene 
+                            <?php
+                                if ($this->anios == 0) {
+                                    echo $this->meses." Meses Comprandonos"; 
+                                }elseif ($this->anios == 1) {
+                                    echo $this->anios." Año y ".$this->meses." Meses Comprandonos"; 
+                                }else {
+                                    echo $this->anios." Años y ".$this->meses." Meses Comprandonos"; 
+                                }
+                            ?>
+                            y ha Concretado <?php echo $this->cantidadVentas; ?> Compras.
+                        </li>
+                        <li class="list-group-item">Tiene una Media de 
+                            <?php 
+                                echo $promedio = number_format($this->totalVentas/$this->cantidadVentas, 2, ',', '.'); 
+                            ?>$$ Por Pedido
+                        </li>
+                        <li class="list-group-item">Fecha Ultima Compra: <?php echo $this->fechaUltimaVenta; ?></li>
+                    </ul>
                 </div>
                 <div class="row">
-                    <div class="col-md-6" id="piechart2" style="width: 1200px; height: 250px;"></div>
+                    <div class="col-md-6" id="piechart" style="width: 1200px; height: 350px;"></div>
                 </div>
-                
-                
+                   
             </div>
     
         </div>
 
         <div class="card-footer"><br>
-            <?php 
-                var_dump($this->rep);
-            ?>
+        <?php 
+        var_dump($this->cantidadVentas);
+        var_dump($this->totalVentas);
+        var_dump($this->anios);
+        var_dump($this->meses);
+        
+        ?>
         </div>
     </div>
     <br><br>
