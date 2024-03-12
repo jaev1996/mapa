@@ -492,21 +492,37 @@ class ConsultaModel extends Model{
             $anios = $duracion->y;
             $meses = $duracion->m;
 
-            return ['cantidadVentas' => $cantidadVentas, 'subTotal' => $subTotal, 'anios' => $anios, 'meses' => $meses, 'fechaUltimaVenta' => $ultimaVenta];
+            $totalMeses = $anios * 12 + $meses;
+            $promedio["mensual"] = round($cantidadVentas / $totalMeses, 2);
+            $promedio["trimestral"] = round($promedio["mensual"] * 3, 2);
+
+            // Calcula el intervalo en días
+            $intervalo_dias = (1 / $promedio["mensual"]) * 30;
+
+            // Convierte la fecha de la última compra a timestamp
+            $timestamp_ultima_compra = strtotime($ultimaVenta);
+
+            // Calcula el timestamp del próximo pedido
+            $timestamp_proximo_pedido = $timestamp_ultima_compra + ($intervalo_dias * 24 * 60 * 60);
+
+            // Convierte el timestamp del próximo pedido a formato de fecha 'Y-m-d'
+            $fecha_proximo_pedido = date('Y-m-d', $timestamp_proximo_pedido);
+
+            return ['cantidadVentas' => $cantidadVentas, 'subTotal' => $subTotal, 'anios' => $anios, 'meses' => $meses, 'fechaUltimaVenta' => $ultimaVenta, 'promedios' => $promedio, 'fechaProximoPedido' => $fecha_proximo_pedido];
         } catch (PDOException $e) {
-            return ['cantidadVentas' => 0, 'subTotal' => 0, 'anios' => 0, 'meses' => 0, 'fechaUltimaVenta' => 0];
+            return ['cantidadVentas' => 0, 'subTotal' => 0, 'anios' => 0, 'meses' => 0, 'fechaUltimaVenta' => 0, 'promedios' => NULL];
         }
     }
     public function getRepNotasBetweenId($id){
         $items = [];
         $facturas_deseadas = $id;
         try { 
-            $query = $this->db->connect()->prepare("SELECT codigoRep, SUM(cantidadRep) AS TotalVendido
+            $query = $this->db->connect()->prepare("SELECT codigoRep, SUM(cantidadRep) AS TotalVendido, SUM(subtotalRep) AS Subtotal
             FROM historicoventas
             WHERE codigoVenta IN (" . implode(',', $facturas_deseadas) . ")
             GROUP BY codigoRep
             ORDER BY TotalVendido DESC
-            LIMIT 10");
+            LIMIT 15");
             $query->execute();
             while ($row = $query->fetch()) {
                 array_push($items, $row);

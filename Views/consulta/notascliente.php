@@ -70,9 +70,26 @@
             legendTextStyle: { fontSize: 12 }
             };
 
+            var data2 = google.visualization.arrayToDataTable([
+            ['Codigo Repuesto', 'Monto Facturado'],
+            <?php 
+                foreach ($this->rep as $key) {
+                    echo "['".$key["codigoRep"]."',".$key["Subtotal"]."],";
+                }
+            ?> 
+            ]);
+
+            var options2 = {
+            title: 'Porcetajes de Facturacion',
+            is3D: true,
+            legendTextStyle: { fontSize: 12 }
+            };
+
             var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            var chart2 = new google.visualization.PieChart(document.getElementById('piechart2'));
 
             chart.draw(data, options);
+            chart2.draw(data2, options2);
             
         }
     </script>
@@ -91,7 +108,7 @@
                     <div class="card col-6 float-right">
                         <div class="card-body">
                             <form class="" method="post">
-                                <label for="">Buscar Cliente Por Nombre:</label>
+                               
                                
                                 
                             </form>
@@ -100,7 +117,7 @@
                     <div class="card col-6 float-right">
                         <div class="card-body">
                             <form class="" method="post">
-                                <label for="">Seleccione el Vendedor</label>
+                               
                                
                             </form>
                         </div>
@@ -157,11 +174,20 @@
                                 echo $promedio = number_format($this->totalVentas/$this->cantidadVentas, 2, ',', '.'); 
                             ?>$$ Por Pedido
                         </li>
+                        <li class="list-group-item">Promedia: 
+                            <?php 
+                                echo $this->promedios["mensual"]." pedidos por Mes y ".$this->promedios["trimestral"]; 
+                            ?> Cada 3 Meses.
+                        </li>
+                        <li class="list-group-item">Fecha Estimada Para Siguiente Pedido: <?php echo $this->fechaProximoPedido; ?></li>
                         <li class="list-group-item">Fecha Ultima Compra: <?php echo $this->fechaUltimaVenta; ?></li>
                     </ul>
                 </div>
                 <div class="row">
                     <div class="col-md-6" id="piechart" style="width: 1200px; height: 350px;"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" id="piechart2" style="width: 1200px; height: 350px;"></div>
                 </div>
                    
             </div>

@@ -122,7 +122,9 @@
             $this->view->totalVentas = $stats['subTotal'];
             $this->view->anios = $stats['anios'];
             $this->view->meses = $stats['meses'];
+            $this->view->promedios = $stats['promedios'];
             $this->view->fechaUltimaVenta = $stats['fechaUltimaVenta'];
+            $this->view->fechaProximoPedido = $stats['fechaProximoPedido'];
             $this->view->rep = $rep;
             $this->view->notas = $notas['items'];
             $this->view->render('consulta/notascliente');
