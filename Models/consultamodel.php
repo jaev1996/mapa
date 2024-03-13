@@ -522,7 +522,7 @@ class ConsultaModel extends Model{
             WHERE codigoVenta IN (" . implode(',', $facturas_deseadas) . ")
             GROUP BY codigoRep
             ORDER BY TotalVendido DESC
-            LIMIT 15");
+            LIMIT 30");
             $query->execute();
             while ($row = $query->fetch()) {
                 array_push($items, $row);
@@ -532,6 +532,26 @@ class ConsultaModel extends Model{
             return $items;
         }
 
+    }
+
+    //FUNCIONES PARA MANEJO DE LA VISTA "STATSREPUESTOS"
+
+    // FUNCION QUE CONSULTA LAS NOTAS
+    public function getNotasByCantNotas($id){
+        $items = [];
+        $query = $this->db->connect()->prepare("SELECT codigoVenta, fechaVenta FROM VENTAS ORDER BY codigoVenta DESC LIMIT 200");
+        try {
+            $facturas_deseadas = [];
+            $query->execute();
+            while ($row = $query->fetch()) {
+                $codigoVenta = $row['codigoVenta'];
+                $facturas_deseadas[] = $codigoVenta;
+                array_push($items, $row);
+            }
+            return ['items' => $items, 'facturas_deseadas' => $facturas_deseadas];
+        } catch (PDOException $e) {
+            return ['items' => $items, 'facturas_deseadas' => $facturas_deseadas];
+        }
     }
 
     public function getCodigoCliente($id){

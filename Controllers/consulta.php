@@ -115,8 +115,6 @@
             $rep = $this->model->getRepNotasBetweenId($notas['facturas_deseadas']);
             $stats = $this->model->getStatsGeneralesCliente($cliente['codigoCliente']);
 
-
-
             $this->view->cliente = $cliente;
             $this->view->cantidadVentas = $stats['cantidadVentas'];
             $this->view->totalVentas = $stats['subTotal'];
@@ -129,6 +127,17 @@
             $this->view->notas = $notas['items'];
             $this->view->render('consulta/notascliente');
         }
+
+        function verStatsRepuestos($param = NULL){
+        
+            $notas = $this->model->getNotasByCantNotas($param);
+            $rep = $this->model->getRepNotasBetweenId($notas['facturas_deseadas']);
+
+            $this->view->rep = $rep;
+            $this->view->notas = $notas['items'];
+            $this->view->render('consulta/statsrepuestos');
+        }
+
         function verProveedores($param = NULL){
             $this->view->render('consulta/proveedores');
         }
