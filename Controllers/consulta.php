@@ -138,6 +138,18 @@
             $this->view->render('consulta/statsrepuestos');
         }
 
+        function searchStatsRepuestos($param = NULL){
+            
+            
+            $cant = $_POST['cantidadNotas'];
+            
+            $notas = $this->model->getNotasByCantNotas($cant);
+            $repuestos = $this->model->getRepNotasBetweenId($notas['facturas_deseadas']);
+
+            return $repuestos;
+
+        }
+
         function verProveedores($param = NULL){
             $this->view->render('consulta/proveedores');
         }

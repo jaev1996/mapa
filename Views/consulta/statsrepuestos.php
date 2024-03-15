@@ -25,32 +25,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script language="JavaScript" type="text/javascript">
-        $(document).ready(function(){
-            $("#searchSelectVend").change(function(){
-                var parametro1 = $(this).val();
-                var parametro2 = $("#searchTxtCli").val(); 
-                var parametros = {
-                    "searchSelectVend": parametro1,
-                    "searchTxtCli": parametro2
-                };
-                    $.ajax({
-                    data:  parametros,
-                    url:   '../consulta/searchClientes',
-                    type:  'post',
-                        beforeSend: function () { },
-                        success:  function (response) {                 
-                            $(".salida").html(response);
-                    },
-                    error:function(){
-                        alert("error")
-                        }
-                });
-              
-            });
-
-        });
-
-
       google.charts.load('current', {'packages':['bar']});
       google.charts.setOnLoadCallback(drawStuff);
 
@@ -117,6 +91,56 @@
         chart2.draw(data2, google.charts.Bar.convertOptions(options2));
       };
 
+      $(document).ready(function(){
+            $("#searchStats").submit(function(e){
+
+              e.preventDefault(); // Evita que el formulario se envíe normalmente
+                var parametro1 = $("#cantidadNotas").val(); 
+                var parametros = {
+                    "cantidadNotas": parametro1
+                };
+
+                    $.ajax({
+                    data:  parametro1,
+                    url:   '../consulta/searchStatsRepuestos',
+                    type:  'post',
+                    success:  function (response) {                 
+                      var newData = google.visualization.arrayToDataTable([
+                        ['Codigo', 'Cantidad'],
+                      ]);
+                      
+                      for (var i = 0; i < response.length; i++) {
+                          var codigo = response[i][0]; // Primer campo: Código
+                          var cantidad = response[i][1]; // Segundo campo: Cantidad
+                          console.log(cantidad);
+                          newData.addRow([codigo, cantidad]);
+                      }
+                      var options2 = {
+                        height: 600,
+                        width: 850,
+                        legend: { position: 'none' },
+                        chart: {
+                          title: 'Stats de Repuestos Con Mayor Recaudacion',
+                          subtitle: 'Monto en Dolares' },
+                        axes: {
+                          x: {
+                            0: {label: 'Principales en Ventas'} // Top x-axis.
+                          }
+                        },
+                        bar: { groupWidth: "90%" },
+                      };
+                      var chart2 = new google.charts.Bar(document.getElementById('statspordolares'));
+                      chart2.draw(newData, google.charts.Bar.convertOptions(options2));
+                    },
+                    error:function(){
+                        alert("error")
+                    }
+                });
+              
+            });
+
+        });
+
     
     </script>
 </head>
@@ -130,6 +154,12 @@
         <div class="card-body">
 
             <div class="text-center text-black h4 font-weight-bold mb-4">Estadisticas Generales:</div>
+            <div class="row">
+            <form id="searchStats" action="" method="post">
+              <input type="text" name="cantidadNotas" id="cantidadNotas"> <!-- Cambia el nombre aquí -->
+              <input type="submit" value="Buscar">
+            </form>
+            </div>
             <div class="row mt-4">
                 
                     <div class="col-md-6" id="statsporcantidades"></div>

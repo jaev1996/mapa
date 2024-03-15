@@ -75,7 +75,7 @@ date_default_timezone_set('America/Caracas');
                 Estadisticas
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="<?php echo constant('URL'); ?>consulta/verEstadisticas">Ver Estadisticas</a>
+                <a class="dropdown-item" href="<?php echo constant('URL'); ?>consulta/verStatsRepuestos">Ver Estadisticas</a>
                 </div>
             </li>
             <!--

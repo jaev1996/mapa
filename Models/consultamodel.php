@@ -529,7 +529,7 @@ class ConsultaModel extends Model{
             }
             return $items;
         } catch (PDOException $e) {
-            return $items;
+            return ['error' => 'Error al ejecutar la consulta: ' . $e->getMessage()];
         }
 
     }
@@ -537,9 +537,16 @@ class ConsultaModel extends Model{
     //FUNCIONES PARA MANEJO DE LA VISTA "STATSREPUESTOS"
 
     // FUNCION QUE CONSULTA LAS NOTAS
-    public function getNotasByCantNotas($id){
+    public function getNotasByCantNotas($cant){
+        $limit = 200; // Valor predeterminado
         $items = [];
-        $query = $this->db->connect()->prepare("SELECT codigoVenta, fechaVenta FROM VENTAS ORDER BY codigoVenta DESC LIMIT 200");
+        if ($cant !== NULL) {
+            // Si se proporciona un valor no nulo para $cant, úsalo como límite
+            $limit = (int) $cant; // Asegúrate de que sea un número entero
+        }
+
+        $query = $this->db->connect()->prepare("SELECT codigoVenta, fechaVenta FROM VENTAS ORDER BY codigoVenta DESC LIMIT :limit");
+        $query->bindParam(':limit', $limit, PDO::PARAM_INT); // Asigna el valor del límite
         try {
             $facturas_deseadas = [];
             $query->execute();
@@ -550,7 +557,8 @@ class ConsultaModel extends Model{
             }
             return ['items' => $items, 'facturas_deseadas' => $facturas_deseadas];
         } catch (PDOException $e) {
-            return ['items' => $items, 'facturas_deseadas' => $facturas_deseadas];
+            return ['error' => 'Error al ejecutar la consulta: ' . $e->getMessage()];
+
         }
     }
 
